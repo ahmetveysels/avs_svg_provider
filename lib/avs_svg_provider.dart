@@ -6,6 +6,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:http/http.dart' as http;
+
+part 'functions/_check_local.dart';
 
 class AVSSVGProvider extends ImageProvider<ProviderModel> {
   /// SVG Path
@@ -56,7 +59,7 @@ class AVSSVGProvider extends ImageProvider<ProviderModel> {
   }
 
   Future<ImageInfo> _loadImage(ProviderModel key) async {
-    String data = await rootBundle.loadString(key.path);
+    String data = await _getSvgString(key.path);
 
     final SvgStringLoader svgStringLoader = SvgStringLoader(data);
     final PictureInfo pictureInfo = await vg.loadPicture(svgStringLoader, null);
@@ -112,6 +115,22 @@ class AVSSVGProvider extends ImageProvider<ProviderModel> {
         .toImage(key.size.width.ceil(), key.size.height.ceil());
 
     return ImageInfo(image: image);
+  }
+
+  static Future<String> _getSvgString(String path) async {
+    bool isLocal = _isLocalImageCheck(path);
+    if (isLocal) {
+      return await rootBundle.loadString(path);
+    } else {
+      return await http.read(Uri.parse(path));
+    }
+
+    // switch (key.source) {
+    //   case SvgSource.network:
+    //     return await http.read(Uri.parse(key.path));
+    //   case SvgSource.asset:
+    //     return await rootBundle.loadString(key.path);
+    // }
   }
 }
 

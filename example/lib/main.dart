@@ -50,7 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     image: DecorationImage(
                       fit: BoxFit.contain,
                       image: AVSSVGProvider(
-                        'assets/layer1.svg',
+                        'https://www.svgrepo.com/show/530440/machine-vision.svg',
                         scale: 9,
                         gradient: const LinearGradient(
                           colors: <Color>[Colors.red, Colors.blue],
