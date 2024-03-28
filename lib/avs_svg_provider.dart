@@ -50,7 +50,8 @@ class AVSSVGProvider extends ImageProvider<ProviderModel> {
   }
 
   @override
-  ImageStreamCompleter loadImage(ProviderModel key, ImageDecoderCallback decode) {
+  ImageStreamCompleter loadImage(
+      ProviderModel key, ImageDecoderCallback decode) {
     return OneFrameImageStreamCompleter(_loadImage(key));
   }
 
@@ -62,10 +63,14 @@ class AVSSVGProvider extends ImageProvider<ProviderModel> {
 
     final ui.Picture picture = pictureInfo.picture;
     ui.PictureRecorder recorder = ui.PictureRecorder();
-    ui.Canvas canvas = Canvas(recorder, Rect.fromPoints(Offset.zero, Offset(key.size.width, key.size.height)));
-    canvas.scale(key.size.width / pictureInfo.size.width, key.size.height / pictureInfo.size.height);
+    ui.Canvas canvas = Canvas(recorder,
+        Rect.fromPoints(Offset.zero, Offset(key.size.width, key.size.height)));
+    canvas.scale(key.size.width / pictureInfo.size.width,
+        key.size.height / pictureInfo.size.height);
     canvas.drawPicture(picture);
-    final ui.Image colorlessImage = await recorder.endRecording().toImage(key.size.width.ceil(), key.size.height.ceil());
+    final ui.Image colorlessImage = await recorder
+        .endRecording()
+        .toImage(key.size.width.ceil(), key.size.height.ceil());
     pictureInfo.picture.dispose();
     ui.Image imgByteData = colorlessImage;
 
@@ -73,30 +78,38 @@ class AVSSVGProvider extends ImageProvider<ProviderModel> {
       return ImageInfo(image: colorlessImage);
     }
     recorder = ui.PictureRecorder();
-    canvas = Canvas(recorder, Rect.fromPoints(Offset.zero, Offset(key.size.width, key.size.height)));
+    canvas = Canvas(recorder,
+        Rect.fromPoints(Offset.zero, Offset(key.size.width, key.size.height)));
     Paint paint = Paint();
 
     Paint paintGradient = Paint();
 
     if (key.gradient != null) {
       paintGradient.blendMode = BlendMode.srcATop;
-      paintGradient.shader = key.gradient!.createShader(Rect.fromLTWH(0, 0, key.size.width, key.size.height));
+      paintGradient.shader = key.gradient!
+          .createShader(Rect.fromLTWH(0, 0, key.size.width, key.size.height));
     } else if (key.color != null) {
       paint.colorFilter = ColorFilter.mode(key.color!, BlendMode.srcIn);
     }
 
-    ui.Size inputSize = ui.Size(imgByteData.width.toDouble(), imgByteData.height.toDouble());
-    final FittedSizes fittedSizes = applyBoxFit(BoxFit.contain, inputSize, inputSize);
+    ui.Size inputSize =
+        ui.Size(imgByteData.width.toDouble(), imgByteData.height.toDouble());
+    final FittedSizes fittedSizes =
+        applyBoxFit(BoxFit.contain, inputSize, inputSize);
     final ui.Size sourceSize = fittedSizes.source;
-    final Rect sourceRect = Alignment.center.inscribe(sourceSize, Offset.zero & inputSize);
-    Rect rect = Rect.fromPoints(const Offset(0.0, 0.0), Offset(imgByteData.width.toDouble(), imgByteData.height.toDouble()));
+    final Rect sourceRect =
+        Alignment.center.inscribe(sourceSize, Offset.zero & inputSize);
+    Rect rect = Rect.fromPoints(const Offset(0.0, 0.0),
+        Offset(imgByteData.width.toDouble(), imgByteData.height.toDouble()));
 
     canvas.drawImageRect(imgByteData, sourceRect, rect, paint);
     if (key.gradient != null) {
       canvas.drawRect(rect, paintGradient);
     }
 
-    final ui.Image image = await recorder.endRecording().toImage(key.size.width.ceil(), key.size.height.ceil());
+    final ui.Image image = await recorder
+        .endRecording()
+        .toImage(key.size.width.ceil(), key.size.height.ceil());
 
     return ImageInfo(image: image);
   }
@@ -124,7 +137,11 @@ class ProviderModel {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is ProviderModel && other.path == path && other.size == size && other.color == color && other.gradient == gradient;
+    return other is ProviderModel &&
+        other.path == path &&
+        other.size == size &&
+        other.color == color &&
+        other.gradient == gradient;
   }
 
   @override
