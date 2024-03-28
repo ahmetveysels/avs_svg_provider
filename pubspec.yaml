@@ -1,0 +1,24 @@
+name: avs_svg_provider
+description: "Flutter package to use your SVG files as an ImageProvider"
+topics:
+  - svg provider
+  - flutter svg provider
+version: 1.0.0
+homepage: https://github.com/ahmetveysels/
+repository: https://github.com/ahmetveysels/avs_svg_provider
+
+environment:
+  sdk: ">=3.3.2 <4.0.0"
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_svg: ^2.0.10+1
+
+dev_dependencies:
+  flutter_lints: ^3.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter: null
